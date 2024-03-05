@@ -117,7 +117,7 @@ def define_bbox_chunks(view, mag, bbox_size=5000):
 
 def inference_3d(config, volume_data, mode='stack', qlen=3, nmax=20000, seg_thr=0.3, nms_thr=0.1, nms_kernel=3, 
                 iou_thr=0.25, ioa_thr=0.25, pixel_vote_thr=2, cluster_io_thr=0.75, min_size=200, 
-                min_span=2, downsample_f=1, one_view=True, fine_boundaries=False, use_cpu=True):
+                min_span=2, downsample_f=1, one_view=True, fine_boundaries=False, use_cpu=True, nworkers=10):
                 
     # read the model config file
     config = load_config(config)
@@ -191,7 +191,7 @@ def inference_3d(config, volume_data, mode='stack', qlen=3, nmax=20000, seg_thr=
         # make axis-specific dataset
         dataset = VolumeDataset(volume, axis, eval_tfs, scale=downsample_f)
 
-        num_workers = 1
+        num_workers = nworkers
         dataloader = DataLoader(
             dataset, batch_size=1, shuffle=False,
             pin_memory=(device == 'gpu'), drop_last=False,
