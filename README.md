@@ -13,4 +13,4 @@ MitoNet inference on Volume EM datasets
 `source /path/to/new/virtual/environment/bin/activate`
 
 - Install dependencies:    
-`pip install requirements.txt`
+`pip install -r requirements.txt`
