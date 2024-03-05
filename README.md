@@ -3,14 +3,14 @@ MitoNet inference on Volume EM datasets
 
 ### Installation
 
-- Clone repository (assumes `git` is installed)
+- Clone repository (assumes `git` is installed)  
 `git clone https://github.com/hoogenboom-group/mitonet-seg`
 
-- Make a Python virtual environment:
+- Make a Python virtual environment:  
 `python3.9 -m venv /path/to/new/virtual/environment`
 
-- Activate:
+- Activate:  
 `source /path/to/new/virtual/environment/bin/activate`
 
-- Install dependencies
+- Install dependencies:    
 `pip install requirements.txt`
