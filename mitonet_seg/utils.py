@@ -1,3 +1,5 @@
+import math
+
 # Data import
 import webknossos as wk
 import numpy as np
