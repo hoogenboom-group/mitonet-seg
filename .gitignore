@@ -4,3 +4,4 @@ mitonet_seg/__pycache__
 dist/
 build/
 logs/
+models/
