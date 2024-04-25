@@ -1,5 +1,7 @@
+from tqdm import tqdm
 import webknossos as wk
 import numpy as np
+
 
 def import_wk_dataset_remote(TOKEN, url, dataset_name, organization_id, MAG, layer="color") -> None:
     # use the context to get access to your group
@@ -42,8 +44,8 @@ def read_data(layer_bbox, MAG, bboxes, mag_view):
 
     # Read data from remote in chunks
     # By looping through bboxes
-    x_offset = bboxes[0].topleft[0]
-    y_offset = bboxes[0].topleft[1]
+    x_offset = bboxes[0].in_mag(MAG).topleft[0]
+    y_offset = bboxes[0].in_mag(MAG).topleft[1]
     for bbox_small in tqdm(bboxes,
                         desc="Reading data from bboxes",
                         total=len(bboxes),
