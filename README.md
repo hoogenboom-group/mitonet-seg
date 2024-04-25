@@ -16,5 +16,5 @@ MitoNet inference on Volume EM datasets
 `pip install -r requirements.txt`
 
 ### Usage
-Edit `mitonet-inference.py` with desired parameters. Then run script by
+Edit `mitonet-inference.py` with desired parameters. Then run script by  
 `python3 mitonet-inference.py`
