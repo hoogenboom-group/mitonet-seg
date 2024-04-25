@@ -1,7 +1,7 @@
 import webknossos as wk
 from tempfile import TemporaryDirectory
 
-def local_export(dataset, layer_name, mag, dtype_per_layer="uint16"):
+def local_export(dataset, layer_name, mag, seg, bbox, dtype_per_layer="uint16"):
     """Local export of segmentation layer to WebKnossos (to existing dataset)"""
     # Make new "segmentation" layer
     segmentation_layer = dataset.add_layer(
@@ -10,11 +10,11 @@ def local_export(dataset, layer_name, mag, dtype_per_layer="uint16"):
             dtype_per_layer=dtype_per_layer,
             compressed=True,
             largest_segment_id=None)
-    mag = segmentation_layer.add_mag(MAG, compress=True)
+    mag = segmentation_layer.add_mag(mag, compress=True)
     
     # Add "Mag" and write segmentation data to "Mag"
-    mag.write(data=mito_labels,
-              absolute_offset=layer_bbox.topleft)
+    mag.write(data=seg,
+              absolute_offset=bbox.topleft)
     segmentation_layer.refresh_largest_segment_id()
 
     # Downsample segmentation
@@ -40,8 +40,8 @@ def remote_export(url, token, new_dataset_name, layer_name, voxel_size, mag,
                 dtype_per_layer=dtype_per_layer,
                 compressed=True
                 )
-            warped_layer.bounding_box = bbox.align_with_mag(MAG) # Highest MAG
-            warped_layer.add_mag(MAG, compress=True).write(seg)
+            warped_layer.bounding_box = bbox.align_with_mag(mag) # Highest MAG
+            warped_layer.add_mag(mag, compress=True).write(seg)
             
             # Downsample segmentation
             if downsample:  
