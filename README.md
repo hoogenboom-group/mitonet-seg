@@ -19,4 +19,5 @@ Automatic MitoNet[1] inference on Volume EM datasets in WebKnossos.
 Edit `mitonet-inference.py` with desired parameters. Then run script by  
 `python3 mitonet-inference.py`
 
+### References
 - [1]: Conrad, R., & Narayan, K. (2023). Instance segmentation of mitochondria in electron microscopy images with a generalist deep learning model trained on a diverse dataset. Cell Systems, 14(1), 58-71.
