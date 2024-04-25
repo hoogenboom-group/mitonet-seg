@@ -1,5 +1,5 @@
 # mitonet-seg
-MitoNet inference on Volume EM datasets
+Automatic MitoNet inference on Volume EM datasets in WebKnossos
 
 ### Installation
 
