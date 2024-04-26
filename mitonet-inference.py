@@ -16,7 +16,7 @@ from mitonet_seg.inferencer import inference_3d
 DATASET_NAME = "20231107_MC7_UAC_realigned_partial_1x_mito_seg" # Dataset name as in WebKnossos
 EM_LAYER = "postcorrection_realigned_SOFIMA"
 CONFIG = os.path.abspath("configs/FinetunedModel.yaml") # MitoNet model configuration file
-REMOTE = True # Set to "True" if importing data remotely (without filesystem mount)
+REMOTE = False # Set to "True" if importing data remotely (without filesystem mount)
 USE_CPU = False # Use GPU, setting to "True" falls back to CPU (computations are much slower)
 DOWNSAMPLE = True # Set to "True" to automatically downsample segmentations
 DTYPE_SEG = 'uint16' # Datatype, standard is uint16
@@ -26,7 +26,7 @@ NEW_DATASET_NAME = DATASET_NAME + '_test' # If remote exporting
 
 # Parameters that should likely be set once
 MAG_X, MAG_Y, MAG_Z = 4, 4, 1 # Magnification level (x, y, z) in WebKnossos to be used for segmentation. Default is (4, 4, 1)
-TOKEN = 'zJ6oc2fKopkTDVnU9F21Fg' # Generate from https://webknossos.tnw.tudelft.nl/auth/token
+TOKEN = None # String, generate from https://webknossos.tnw.tudelft.nl/auth/token
 ORGANIZATION_ID = "hoogenboom-group" # "hoogenboom-group"
 URL = "https://webknossos.tnw.tudelft.nl" # "https://webknossos.tnw.tudelft.nl" 
 BASE_DIR = f"/home/ajkievits/sonic" # Mount location or "/long_term_storage" if directly running on sonic
