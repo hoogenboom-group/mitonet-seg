@@ -14,14 +14,14 @@ from mitonet_seg.inferencer import inference_3d
 
 # script properties
 DATASET_NAME = "20231107_MC7_UAC_realigned_partial_1x_mito_seg" # Dataset name as in WebKnossos
-EM_LAYER = "postcorrection_realigned_SOFIMA"
+EM_LAYER = "postcorrection_realigned_SOFIMA" # EM layer to predict mitochondria from
 CONFIG = os.path.abspath("configs/FinetunedModel.yaml") # MitoNet model configuration file
 REMOTE = False # Set to "True" if importing data remotely (without filesystem mount)
 USE_CPU = False # Use GPU, setting to "True" falls back to CPU (computations are much slower)
 DOWNSAMPLE = True # Set to "True" to automatically downsample segmentations
 DTYPE_SEG = 'uint16' # Datatype, standard is uint16
 
-NEW_LAYER_NAME = EM_LAYER + "_MitoNet"  
+NEW_LAYER_NAME = EM_LAYER + "_MitoNet"  # New predictions layer name
 NEW_DATASET_NAME = DATASET_NAME + '_test' # If remote exporting
 
 # Parameters that should likely be set once
