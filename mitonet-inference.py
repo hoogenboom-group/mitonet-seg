@@ -16,17 +16,17 @@ from mitonet_seg.inferencer import inference_3d
 DATASET_NAME = "20231107_MC7_UAC_realigned_partial_1x_mito_seg" # Dataset name as in WebKnossos
 EM_LAYER = "postcorrection_realigned_SOFIMA"
 CONFIG = os.path.abspath("configs/FinetunedModel.yaml") # MitoNet model configuration file
-REMOTE = False # Set to "True" if importing data remotely (without filesystem mount)
+REMOTE = True # Set to "True" if importing data remotely (without filesystem mount)
 USE_CPU = False # Use GPU, setting to "True" falls back to CPU (computations are much slower)
 DOWNSAMPLE = True # Set to "True" to automatically downsample segmentations
 DTYPE_SEG = 'uint16' # Datatype, standard is uint16
 
 NEW_LAYER_NAME = EM_LAYER + "_MitoNet"  
-NEW_DATASET_NAME = DATASET_NAME + '_mito_seg' # If remote exporting
+NEW_DATASET_NAME = DATASET_NAME + '_test' # If remote exporting
 
 # Parameters that should likely be set once
 MAG_X, MAG_Y, MAG_Z = 4, 4, 1 # Magnification level (x, y, z) in WebKnossos to be used for segmentation. Default is (4, 4, 1)
-TOKEN = None # Generate from https://webknossos.tnw.tudelft.nl/auth/token
+TOKEN = 'zJ6oc2fKopkTDVnU9F21Fg' # Generate from https://webknossos.tnw.tudelft.nl/auth/token
 ORGANIZATION_ID = "hoogenboom-group" # "hoogenboom-group"
 URL = "https://webknossos.tnw.tudelft.nl" # "https://webknossos.tnw.tudelft.nl" 
 BASE_DIR = f"/home/ajkievits/sonic" # Mount location or "/long_term_storage" if directly running on sonic
@@ -59,7 +59,7 @@ def _main():
     bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=10000)
     
     # Read data into memory
-    logging.info("Reading data into memory")
+    logging.info(f"Reading data from {DATASET_NAME} into memory")
     data = importer.read_data(layer_bbox, MAG, bboxes, mag_view)
     
     # Run 3d inference (weirdly has to be on yz stack)
@@ -68,13 +68,18 @@ def _main():
                            min_span=1, downsample_f=1, one_view=True, fine_boundaries=False, use_cpu=USE_CPU, nworkers=1)
     # Export   
     if REMOTE:
-        layers_2_link = dataset.get_color_layers() + dataset.get_segmentation_layers()
-        exporter.remote_export(url=URL, token=TOKEN, new_dataset_name=NEW_DATASET_NAME, layer_name=NEW_LAYER_NAME, voxel_size=voxelsize, mag=MAG, 
-                               bbox=layer_bbox, seg=mito_labels, layers_2_link=layers_2_link, dtype_per_layer=DTYPE_SEG, downsample=DOWNSAMPLE)
+        # layers_2_link = dataset.get_color_layers() + dataset.get_segmentation_layers() BREAKS FOR SOME REASON
+        layers_2_link = [dataset.get_layer(EM_LAYER)] # layers_2_link needs to be an iterable, only link EM layer in this case
+        logging.info(f"Exporting remotely, layers to link: {layers_2_link}")
+        remote_ds = exporter.remote_export(url=URL, token=TOKEN, new_dataset_name=NEW_DATASET_NAME, layer_name=NEW_LAYER_NAME, 
+                                           voxel_size=voxelsize, mag=MAG, bbox=layer_bbox, seg=mito_labels, 
+                                           layers_2_link=layers_2_link, dtype_per_layer=DTYPE_SEG, downsample=DOWNSAMPLE)
+        logging.info(f"Succesfully uploaded {remote_ds.url}")
     else:
+        logging.info(f"Exporting locally")
         exporter.local_export(dataset=dataset, layer_name=NEW_LAYER_NAME, mag=MAG, 
                               seg=mito_labels, bbox=layer_bbox, dtype_per_layer=DTYPE_SEG)
-    
+        
     
 if __name__ == "__main__":
     logging.basicConfig(
