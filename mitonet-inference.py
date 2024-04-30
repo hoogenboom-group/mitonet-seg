@@ -64,9 +64,9 @@ def _main():
     # Bounding box
     layer_bbox = dataset.get_layer(EM_LAYER).bounding_box.align_with_mag(MAG)   
     
-    # Define chunks because array size may exceed vram
     view = mag_view.get_view(offset=layer_bbox.in_mag(MAG).topleft, size=layer_bbox.in_mag(MAG).size)
     if REMOTE:
+        # Define chunks because array size may exceed vram
         bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=5000)
     else:
         bboxes = layer_bbox.in_mag(MAG)
