@@ -66,9 +66,10 @@ def _main():
     
     view = mag_view.get_view(offset=layer_bbox.in_mag(MAG).topleft, size=layer_bbox.in_mag(MAG).size)
     if REMOTE:
-        # Define chunks because array size may exceed vram
+        # Define chunks because full dataset size may not import
         bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=5000)
     else:
+        # Import in one go if locally (works)
         bboxes = layer_bbox.in_mag(MAG)
     
     # Read data into memory
