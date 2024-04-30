@@ -13,15 +13,15 @@ import mitonet_seg.exporter as exporter
 from mitonet_seg.inferencer import inference_3d 
 
 # script properties
-DATASET_NAME = "20231107_MC7_UAC_realigned_partial_1x_mito_seg" # Dataset name as in WebKnossos
-EM_LAYER = "postcorrection_realigned_SOFIMA" # EM layer to predict mitochondria from
+DATASET_NAME = "20230626_RP_serial_warped_full_1x_mito_seg" # Dataset name as in WebKnossos
+EM_LAYER = "color" # EM layer to predict mitochondria from
 CONFIG = os.path.abspath("configs/FinetunedModel.yaml") # MitoNet model configuration file
 REMOTE = False # Set to "True" if importing data remotely (without filesystem mount)
 USE_CPU = False # Use GPU, setting to "True" falls back to CPU (computations are much slower)
-DOWNSAMPLE = True # Set to "True" to automatically downsample segmentations
+DOWNSAMPLE = False # Set to "True" to automatically downsample segmentations
 DTYPE_SEG = 'uint16' # Datatype, standard is uint16
 
-NEW_LAYER_NAME = EM_LAYER + "_MitoNet"  # New predictions layer name
+NEW_LAYER_NAME = EM_LAYER + "_MitoNet_Finetuned"  # New predictions layer name
 NEW_DATASET_NAME = DATASET_NAME + '_test' # If remote exporting
 
 # Parameters that should likely be set once
@@ -30,6 +30,16 @@ TOKEN = None # String, generate from https://webknossos.tnw.tudelft.nl/auth/toke
 ORGANIZATION_ID = "hoogenboom-group" # "hoogenboom-group"
 URL = "https://webknossos.tnw.tudelft.nl" # "https://webknossos.tnw.tudelft.nl" 
 BASE_DIR = f"/home/ajkievits/sonic" # Mount location or "/long_term_storage" if directly running on sonic
+
+# Set GPU
+if not USE_CPU:
+    # set the environment variable 'CUDA_VISIBLE_DEVICES'
+    # this sets which GPU can be seen by the program
+    # Either set it to "0", "1", "2", "3"
+    # or if you want to use multiple GPUs add commas between the numbers
+    # e.g. "0,1"
+    # the numbers correspond with those in the command 'nvidia-smi'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 
 def _main():
@@ -56,7 +66,10 @@ def _main():
     
     # Define chunks because array size may exceed vram
     view = mag_view.get_view(offset=layer_bbox.in_mag(MAG).topleft, size=layer_bbox.in_mag(MAG).size)
-    bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=10000)
+    if REMOTE:
+        bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=5000)
+    else:
+        bboxes = layer_bbox.in_mag(MAG)
     
     # Read data into memory
     logging.info(f"Reading data from {DATASET_NAME} into memory")
