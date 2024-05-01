@@ -35,33 +35,15 @@ def import_wk_dataset_local(dir_path, MAG, layer="color") -> None:
     # return data, voxel size
     return dataset, mag_view, voxel_size
 
-def read_data(layer_bbox, MAG, bboxes, mag_view): 
-    # Infer data set dimensions (in desired mag)
-    dim = layer_bbox.in_mag(MAG).size
-
-    # Allocate memory
-    data = np.zeros((1, dim.x, dim.y, dim.z), dtype=np.uint8)
-
+def read_data(bboxes, mag_view):
     # Read data from remote in chunks
     # By looping through bboxes
-    x_offset = bboxes[0].in_mag(MAG).topleft[0]
-    y_offset = bboxes[0].in_mag(MAG).topleft[1]
     for bbox_small in tqdm(bboxes,
                         desc="Reading data from bboxes",
                         total=len(bboxes),
                         unit="bbox"):
         # Fill slice in array with data from smaller bbox
         view_small = mag_view.get_view(absolute_offset=bbox_small.topleft, 
-                                    size=bbox_small.size)
-        x_start = bbox_small.in_mag(MAG).topleft.x - x_offset
-        x_end = x_start + bbox_small.in_mag(MAG).size.x
-        y_start = bbox_small.in_mag(MAG).topleft.y - y_offset
-        y_end = y_start + bbox_small.in_mag(MAG).size.y
-        
-        data[:, 
-            x_start:x_end,
-            y_start:y_end,
-            :] = view_small.read()
-    
-    # return data
-    return data
+                                       size=bbox_small.size)
+        data = view_small.read()
+        yield bbox_small, data
