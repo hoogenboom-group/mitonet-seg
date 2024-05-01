@@ -17,7 +17,7 @@ from mitonet_seg.inferencer import inference_3d
 # script properties
 DATASET_NAME = "20230626_RP_serial_warped_full_1x_mito_seg" # Dataset name as in WebKnossos
 EM_LAYER = "color" # EM layer to predict mitochondria from
-CONFIG = os.path.abspath("configs/FinetunedModel.yaml") # MitoNet model configuration file
+CONFIG = os.path.abspath("/home/ajkievits/projects/mitonet-seg/configs/FinetunedModel.yaml") # MitoNet model configuration file
 REMOTE = False # Set to "True" if importing data remotely (without filesystem mount)
 USE_CPU = False # Use GPU, setting to "True" falls back to CPU (computations are much slower)
 DOWNSAMPLE = False # Set to "True" to automatically downsample segmentations
@@ -42,7 +42,7 @@ if not USE_CPU:
     # or if you want to use multiple GPUs add commas between the numbers
     # e.g. "0,1"
     # the numbers correspond with those in the command 'nvidia-smi'
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
 def _main():
@@ -69,12 +69,12 @@ def _main():
     dim = layer_bbox.in_mag(MAG).size # Infer data set dimensions (in desired mag)
     view = mag_view.get_view(offset=layer_bbox.in_mag(MAG).topleft, size=layer_bbox.in_mag(MAG).size)
     # Define chunks 
-    if dim.x or dim.x > 5000:
-        bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=5000) # list
+    if dim.x or dim.x > BBOX_SIZE:
+        bboxes = define_bbox_chunks(view, mag=MAG, bbox_size=BBOX_SIZE) # list
     else:
         bboxes = [layer_bbox.in_mag(MAG)]
     # Allocate memory 
-    mito_labels = np.zeros((1, dim.x, dim.y, dim.z), dtype=np.uint8)
+    mito_labels = np.zeros((1, dim.x, dim.y, dim.z), dtype=DTYPE_SEG)
     # Dataset offset
     x_offset = bboxes[0].in_mag(MAG).topleft[0]
     y_offset = bboxes[0].in_mag(MAG).topleft[1]
