@@ -21,3 +21,7 @@ Edit `mitonet-inference.py` with desired parameters. Then run script by
 
 ### References
 - [1]: Conrad, R., & Narayan, K. (2023). Instance segmentation of mitochondria in electron microscopy images with a generalist deep learning model trained on a diverse dataset. Cell Systems, 14(1), 58-71.
+
+### Links
+- Documentation of empanada-napari: https://empanada.readthedocs.io/en/latest/
+- Original Empanada code: https://github.com/volume-em/empanada
