@@ -1,5 +1,5 @@
 # mitonet-seg
-Automatic MitoNet[1] inference on Volume EM datasets in WebKnossos.
+Automatic MitoNet[1] inference on Volume EM datasets in WebKnossos. Used in the Hoogenboom group.
 
 ### Installation
 
