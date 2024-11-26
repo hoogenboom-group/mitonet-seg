@@ -1,7 +1,8 @@
 .venv/
-mitonet_seg/__pycache__
+src/mitonet_seg/__pycache__
 *.egg-info/
 dist/
 build/
 logs/
 models/
+projects/
