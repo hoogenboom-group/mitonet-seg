@@ -1,0 +1,51 @@
+[project]
+name = "mitonet-seg"
+version = "0.0.1"
+authors = [
+  { name="arentkievits", email="a.j.kievits@tudelft.nl" },
+]
+keywords = [
+  "image analysis",
+  "electron microscopy",
+  "microscopy",
+  "empanada",
+  "segmentation",
+]
+description = "MitoNet inference on Volume EM datasets"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Attribution-NoDerivatives 4.0 International",
+  "Operating System :: Linux",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
+    "webknossos",
+    "torch>=1.10",
+    "torchvision>=0.2",
+    "numpy>=1.20",
+    "numba>=0.54",
+    "zarr>=2.12",
+    "opencv-python>=4.5.3",
+    "scikit-image>=0.19",
+    "albumentations>=1.2",
+    "pyyaml",
+    "cztile",    
+    "mlflow",
+    "jupyter",  
+    "matplotlib",
+    "empanada-napari",
+    "pyqt5-tools",
+]
+
+[project.optional-dependencies]
+
+[project.urls]
+"Homepage" = "https://github.com/hoogenboom-group/mitonet-seg"
+"Bug Tracker" = "https://github.com/hoogenboom-group/mitonet-seg/issues"
+
+[project.scripts]
