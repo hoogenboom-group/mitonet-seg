@@ -14,7 +14,10 @@ from empanada.inference import filters
 from empanada.config_loaders import load_config
 from empanada.inference.patterns import *
 
-def inference_3d(config, volume_data, mode='stack', qlen=3, nmax=20000, seg_thr=0.3, nms_thr=0.1, nms_kernel=3, 
+import os 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
+def inference_3d(volume_data, config, mode='stack', qlen=3, nmax=20000, seg_thr=0.3, nms_thr=0.1, nms_kernel=3, 
                  iou_thr=0.25, ioa_thr=0.25, pixel_vote_thr=2, cluster_io_thr=0.75, min_size=200, 
                  min_span=2, downsample_f=1, one_view=True, fine_boundaries=False, use_cpu=False, nworkers=1):
                 
@@ -155,6 +158,6 @@ def inference_3d(config, volume_data, mode='stack', qlen=3, nmax=20000, seg_thr=
         # decode and fill the instances
         consensus_vol = np.zeros(shape, dtype=dtype)
         fill_volume(consensus_vol, consensus_tracker.instances)
-
+    consensus_vol = np.expand_dims(consensus_vol, axis=0)
     print('Finished!')
     return consensus_vol

@@ -40,6 +40,7 @@ dependencies = [
     "matplotlib",
     "empanada-napari",
     "pyqt5-tools",
+    "dask",
 ]
 
 [project.optional-dependencies]
